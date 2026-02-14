@@ -1,0 +1,260 @@
+[gd_scene load_steps=17 format=3 uid="uid://3iticee50576"]
+
+[ext_resource type="PackedScene" uid="uid://vlbj6n1x2ir5" path="res://scenes/Player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/BrokenEngine.cs" id="2_engine"]
+[ext_resource type="Script" path="res://scripts/Ship.cs" id="3_ship"]
+[ext_resource type="Script" path="res://scripts/PilotSeat.cs" id="4_seat"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_space"]
+sky_top_color = Color(0, 0, 0, 1)
+sky_horizon_color = Color(0, 0, 0, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+sun_angle_max = 0.0
+
+[sub_resource type="Sky" id="Sky_space"]
+sky_material = SubResource("ProceduralSkyMaterial_space")
+
+[sub_resource type="Environment" id="Environment_space"]
+background_mode = 2
+sky = SubResource("Sky_space")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
+transparency = 1
+albedo_color = Color(0.1, 0.1, 0.15, 0.2)
+metallic = 0.5
+roughness = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_engine"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_seat"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_console"]
+albedo_color = Color(0.3, 0.3, 0.35, 1)
+metallic = 0.8
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_screen"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(0, 1, 0.2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_screen_amber"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.6, 0, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wire"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+metallic = 0.2
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button_red"]
+albedo_color = Color(0.8, 0, 0, 1)
+metallic = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button_blue"]
+albedo_color = Color(0, 0.5, 0.8, 1)
+metallic = 0.5
+
+[node name="Ship" type="CharacterBody3D"]
+script = ExtResource("3_ship")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_space")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
+shadow_enabled = true
+
+[node name="ShipModules" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="HullWait" type="CSGBox3D" parent="ShipModules"]
+size = Vector3(24, 5, 42)
+
+[node name="RoomCockpit" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+operation = 2
+size = Vector3(14, 4, 8)
+
+[node name="RoomEngine" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16)
+operation = 2
+size = Vector3(14, 4, 8)
+
+[node name="RoomWest" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 0)
+operation = 2
+size = Vector3(6, 4, 10)
+
+[node name="RoomEast" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+operation = 2
+size = Vector3(6, 4, 10)
+
+[node name="CorridorMain" type="CSGBox3D" parent="ShipModules"]
+operation = 2
+size = Vector3(4, 4, 22)
+
+[node name="CorridorCross" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+operation = 2
+size = Vector3(12, 3, 3)
+
+[node name="DoorFrameCockpit" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -11.5)
+operation = 2
+size = Vector3(2, 3, 2)
+
+[node name="DoorFrameEngine" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 11.5)
+operation = 2
+size = Vector3(2, 3, 2)
+
+[node name="CockpitWindow" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -20.5)
+operation = 2
+size = Vector3(18, 4, 4)
+
+[node name="WindowWest" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11.5, 0.5, 0)
+operation = 2
+size = Vector3(6, 2, 2)
+
+[node name="WindowEast" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.5, 0.5, 0)
+operation = 2
+size = Vector3(6, 2, 2)
+
+[node name="GlassCockpit" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -20.5)
+size = Vector3(18, 4, 0.1)
+material = SubResource("StandardMaterial3D_glass")
+
+[node name="GlassWest" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11.5, 0.5, 0)
+size = Vector3(6, 2, 0.1)
+material = SubResource("StandardMaterial3D_glass")
+
+[node name="GlassEast" type="CSGBox3D" parent="ShipModules"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.5, 0.5, 0)
+size = Vector3(6, 2, 0.1)
+material = SubResource("StandardMaterial3D_glass")
+
+[node name="EngineUnit" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.25, 18)
+script = ExtResource("2_engine")
+PromptMessage = "Repair Engine"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EngineUnit"]
+shape = SubResource("BoxShape3D_engine")
+
+[node name="MeshInstance3D" type="CSGBox3D" parent="EngineUnit"]
+size = Vector3(1.5, 1.5, 1.5)
+
+[node name="PilotSeat" type="StaticBody3D" parent="." node_paths=PackedStringArray("CockpitCameraPosition", "ParentShip")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, -18)
+script = ExtResource("4_seat")
+CockpitCameraPosition = NodePath("CockpitCam")
+ParentShip = NodePath("..")
+PromptMessage = "Pilot Ship"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PilotSeat"]
+shape = SubResource("BoxShape3D_seat")
+
+[node name="SeatMesh" type="CSGBox3D" parent="PilotSeat"]
+
+[node name="CockpitCam" type="Node3D" parent="PilotSeat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="InstrumentPanel" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -19.5)
+
+[node name="MainDeck" type="CSGBox3D" parent="InstrumentPanel"]
+size = Vector3(7, 0.8, 1.5)
+material = SubResource("StandardMaterial3D_console")
+
+[node name="ScreenCenter" type="CSGBox3D" parent="InstrumentPanel"]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0.6, -0.2)
+size = Vector3(2.5, 1.2, 0.1)
+material = SubResource("StandardMaterial3D_screen")
+
+[node name="ScreenRight" type="CSGBox3D" parent="InstrumentPanel"]
+transform = Transform3D(0.939693, -0.144544, 0.309975, 0, 0.906308, 0.422618, -0.34202, -0.397127, 0.851648, 2, 0.5, 0)
+size = Vector3(1.5, 1, 0.1)
+material = SubResource("StandardMaterial3D_screen_amber")
+
+[node name="ControlStick" type="CSGCylinder3D" parent="InstrumentPanel"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, -1.5, 0.6, 0.3)
+radius = 0.05
+height = 0.8
+material = SubResource("StandardMaterial3D_wire")
+
+[node name="WireBundle" type="CSGCylinder3D" parent="InstrumentPanel"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.5, 0.4, 0.5)
+radius = 0.02
+material = SubResource("StandardMaterial3D_wire")
+
+[node name="ButtonArray1" type="CSGBox3D" parent="InstrumentPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.45, 0.3)
+size = Vector3(0.8, 0.1, 0.4)
+material = SubResource("StandardMaterial3D_button_red")
+
+[node name="ButtonArray2" type="CSGBox3D" parent="InstrumentPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.45, 0.3)
+size = Vector3(0.5, 0.1, 0.2)
+material = SubResource("StandardMaterial3D_button_blue")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="LightCockpit" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -16)
+light_color = Color(0.2, 1, 0.4, 1)
+light_energy = 2.0
+omni_range = 10.0
+
+[node name="LightEngine" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 16)
+light_color = Color(0.2, 1, 0.4, 1)
+light_energy = 2.0
+omni_range = 10.0
+
+[node name="LightCorridor" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+light_color = Color(0.8, 0.9, 1, 1)
+omni_range = 10.0
+
+[node name="LightWest" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.5, 0)
+light_color = Color(0.2, 0.4, 1, 1)
+light_energy = 2.0
+omni_range = 8.0
+
+[node name="LightEast" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.5, 0)
+light_color = Color(1, 0.4, 0.2, 1)
+light_energy = 2.0
+omni_range = 8.0
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="Asteroid1" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 10, -80)
+top_level = true
+radius = 5.0
+
+[node name="Asteroid2" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -15, -120)
+top_level = true
+radius = 8.0
+
+[node name="Planet" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 50, -300)
+top_level = true
+radius = 40.0

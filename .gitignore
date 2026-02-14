@@ -1,0 +1,16 @@
+# Godot-specific ignores
+.godot/
+/android/
+/ios/
+*.translation
+
+# C# / .NET specific ignores
+.vs/
+bin/
+obj/
+*.csproj.user
+*.sln.docstates
+
+# Mono-specific ignores
+.mono/
+data_*/
