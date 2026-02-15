@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://3iticee50576"]
+[gd_scene load_steps=25 format=3 uid="uid://3iticee50576"]
 
 [ext_resource type="PackedScene" uid="uid://vlbj6n1x2ir5" path="res://scenes/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/BrokenEngine.cs" id="2_engine"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/PilotSeat.cs" id="4_seat"]
 [ext_resource type="Script" path="res://scripts/ShipLights.cs" id="5_lights"]
 [ext_resource type="Texture2D" uid="uid://fy0de1cy236o" path="res://assets/textures/universe_skybox.png" id="5_skybox"]
+[ext_resource type="PackedScene" path="res://scenes/LocalMap.tscn" id="6_localmap"]
 [ext_resource type="Material" uid="uid://cw8t1gat5uaea" path="res://assets/materials/ceiling_tech.tres" id="Mat_Ceiling"]
 [ext_resource type="Material" path="res://assets/materials/console_buttons.tres" id="Mat_Console_Buttons"]
 [ext_resource type="Material" path="res://assets/materials/console_surface.tres" id="Mat_Console_Surface"]
@@ -255,6 +256,11 @@ material = ExtResource("Mat_Console_Surface")
 transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0.6, -0.2)
 size = Vector3(2.5, 1.2, 0.1)
 material = ExtResource("Mat_Screen_Nav")
+
+[node name="SubViewport" type="SubViewport" parent="InstrumentPanel/ScreenCenter"]
+size = Vector2i(512, 256)
+
+[node name="LocalMap" parent="InstrumentPanel/ScreenCenter/SubViewport" instance=ExtResource("6_localmap")]
 
 [node name="ScreenRight" type="CSGBox3D" parent="InstrumentPanel"]
 transform = Transform3D(0.939693, -0.144544, 0.309975, 0, 0.906308, 0.422618, -0.34202, -0.397127, 0.851648, 2, 0.5, 0)

@@ -1,0 +1,122 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8x7y3z2w1v0"]
+
+[ext_resource type="Script" path="res://scripts/PlanetScanUI.cs" id="1_scan"]
+
+[node name="PlanetScanUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_scan")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -250.0
+offset_right = 200.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "PLANETARY SCAN"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Planet Name"
+horizontal_alignment = 1
+
+[node name="TypeLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Planet Type"
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="GravityLabel" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Gravity:"
+
+[node name="GravityValue" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1.0 g"
+
+[node name="RadiusLabel" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Radius:"
+
+[node name="RadiusValue" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "6000 km"
+
+[node name="AtmosphereLabel" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Atmosphere:"
+
+[node name="AtmosphereValue" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Nitrogen-Oxygen"
+
+[node name="TemperatureLabel" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Temperature:"
+
+[node name="TemperatureValue" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "20 C"
+
+[node name="WeatherLabel" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Weather:"
+
+[node name="WeatherValue" type="Label" parent="Panel/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Clear"
+
+[node name="Spacer" type="Control" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "CLOSE"

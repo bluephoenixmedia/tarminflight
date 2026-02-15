@@ -158,31 +158,28 @@ public partial class Player : CharacterBody3D
 
 	public void EnterPilotMode(Ship ship, Node3D cockpitCam)
 	{
+		GD.Print("[PLAYER] Entering Pilot Mode");
 		_isPiloting = true;
 		_currentShip = ship;
 		_currentShip.SetPiloted(true);
 
 		// Snap to cockpit
-		// We re-parent to the ship so we move with it smoothly without physics jitter
 		if (GetParent() != ship)
 		{
 			GetParent().RemoveChild(this);
 			ship.AddChild(this);
 		}
 		
-		// Reset local position/rotation to match the camera mount
 		GlobalPosition = cockpitCam.GlobalPosition;
 		GlobalRotation = cockpitCam.GlobalRotation;
 		
-		// Reset Head and Camera rotation to look forward
 		Head.Rotation = Vector3.Zero;
 		Camera.Rotation = Vector3.Zero;
-		
-		// Optional: Hide the player body mesh if you have one
 	}
 
 	public void ExitPilotMode()
 	{
+		GD.Print("[PLAYER] Exiting Pilot Mode");
 		_isPiloting = false;
 		if (_currentShip != null)
 		{
@@ -190,11 +187,11 @@ public partial class Player : CharacterBody3D
 			_currentShip = null;
 		}
 
-		// When exiting, we are still child of the ship, which is fine!
-		// We just re-enable physics processing (automatically done by setting _isPiloting false)
-		// But we might want to ensure we're standing up? 
-		// For now, staying seated visually but regaining movement control will make us 'pop' out of the seat as soon as we move.
-		// Let's add a small offset to 'stand up'
-		Position += new Vector3(0, 0, 1.0f); 
+        Input.MouseMode = Input.MouseModeEnum.Captured;
+		GD.Print($"[PLAYER] MouseMode set to Captured. IsPiloting: {_isPiloting}");
+
+		Position += new Vector3(0, 0, 1.5f); 
+        Velocity = Vector3.Zero;
+		GD.Print($"[PLAYER] Position reset to {Position}");
 	}
 }
