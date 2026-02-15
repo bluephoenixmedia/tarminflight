@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/PlanetRandomizer.cs" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/earth.png" id="2_earth"]
+[ext_resource type="Texture2D" path="res://assets/textures/gas_giant.png" id="3_gas"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_planet"]
+radius = 50.0
+height = 100.0
+
+[node name="Planet" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_planet")
+script = ExtResource("1_script")
+PlanetTextures = [ExtResource("2_earth"), ExtResource("3_gas")]

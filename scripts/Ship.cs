@@ -4,11 +4,15 @@ using System;
 public partial class Ship : CharacterBody3D
 {
 	[Export] public float MaxSpeed = 50.0f;
-	[Export] public float Acceleration = 10.0f;
-	[Export] public float RotationSpeed = 1.5f;
+	[Export]
+	public float Acceleration = 20.0f;
+	[Export]
+	public float RotationSpeed = 2.0f;
 
-	private bool _isPiloted = false;
 	private float _currentSpeed = 0.0f;
+	private bool _isPiloted = false;
+
+	public bool IsPiloted { get { return _isPiloted; } }
 
 	public void SetPiloted(bool piloted)
 	{
@@ -17,13 +21,24 @@ public partial class Ship : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!_isPiloted) return;
+		if (!_isPiloted) 
+		{
+			// Even if not piloted, maybe drift or just dampen speed?
+			// For now, let's keep previous speed logic if we want momentum, but likely we want to stop.
+			// _currentSpeed = Mathf.MoveToward(_currentSpeed, 0, Acceleration * (float)delta);
+			return;
+		}
+
 
 		float dt = (float)delta;
+        
 
 		// Rotation (Pitch/Yaw/Roll)
 		Vector3 rotInput = Vector3.Zero;
-		rotInput.X = Input.GetAxis("move_forward", "move_backward"); // Pitch (W/S)
+		// User requested inverted controls (or just swapped).
+		// Previously: "move_forward" (W) -> -1, "move_backward" (S) -> +1
+		// We negate the result to invert.
+		rotInput.X = -Input.GetAxis("move_forward", "move_backward"); // Pitch
 		rotInput.Y = Input.GetAxis("move_right", "move_left");       // Yaw (A/D)
 		// flt roll = Input.GetAxis("roll_left", "roll_right"); // Q/E (TODO: Add Input Map)
 

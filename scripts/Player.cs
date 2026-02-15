@@ -60,29 +60,78 @@ public partial class Player : CharacterBody3D
 		if (_isPiloting) return; // Disable movement processing
 
 		Vector3 velocity = Velocity;
+		
+		// Determine Gravity Direction (Down)
+		// If we are parented to a Ship (or anything really), use its Down vector for Artificial Gravity.
+		// If not, use Global Down (-Y).
+		Vector3 gravityDir = Vector3.Down;
+		if (GetParent() is Node3D parentNode)
+		{
+			// Transform local Down (0, -1, 0) to Global
+			// Actually, simpler: The parent's -Y basis vector is "Down" locally.
+			gravityDir = -parentNode.GlobalTransform.Basis.Y.Normalized();
+			
+			// Rotate the player to align with the new gravity?
+			// Ideally we want the player's Up to be -gravityDir.
+			// But for now, let's just apply force.
+			UpDirection = -gravityDir;
+		}
 
 		// Add the gravity.
 		if (!IsOnFloor())
-			velocity.Y -= gravity * (float)delta;
+		{
+			velocity += gravityDir * gravity * (float)delta;
+		}
 
 		// Handle Jump.
 		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-			velocity.Y = JumpVelocity;
+			velocity += UpDirection * JumpVelocity;
 
 		// Get the input direction and handle the movement/deceleration.
 		Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
-		// Transform input direction to be relative to the Head's Y rotation (yaw)
-		Vector3 direction = (Head.GlobalTransform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+		
+		// MOVEMENT LOGIC:
+		// We want to move forward/right relative to the Head's view, projected onto the floor plane (perpendicular to Gravity).
+		// 1. Get Forward/Right from Head
+		Vector3 camForward = -Head.GlobalTransform.Basis.Z;
+		Vector3 camRight = Head.GlobalTransform.Basis.X;
+		
+		// 2. Project onto plane defined by UpDirection
+		// Plane normal = UpDirection.
+		// Vector3.ProjectOnPlane(vector, normal)
+		
+		// But Head is child of Player, which... we haven't rotated to match UpDirection explicitly every frame,
+		// relying on initial placement.
+		// Let's project camera vectors against UpDirection.
+		
+		// Manual project: v - (v . n) * n
+		Vector3 forwardProjected = (camForward - (camForward.Dot(UpDirection) * UpDirection)).Normalized();
+		Vector3 rightProjected = (camRight - (camRight.Dot(UpDirection) * UpDirection)).Normalized();
+		
+		Vector3 direction = (forwardProjected * -inputDir.Y + rightProjected * inputDir.X).Normalized();
 
 		if (direction != Vector3.Zero)
 		{
-			velocity.X = direction.X * Speed;
-			velocity.Z = direction.Z * Speed;
+			// Apply speed along the surface
+			// We remove existing velocity along the movement plane first? 
+			// No, standard character controller logic:
+			
+			// We want to set the planar velocity to (direction * Speed)
+			// But keep the vertical (gravity) velocity.
+			
+			Vector3 verticalVelocity = velocity.Project(UpDirection);
+			Vector3 planarVelocity = direction * Speed;
+			
+			velocity = verticalVelocity + planarVelocity;
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
+			// Decelerate planar velocity
+			Vector3 verticalVelocity = velocity.Project(UpDirection);
+			Vector3 planarVelocity = velocity - verticalVelocity;
+			
+			planarVelocity = planarVelocity.MoveToward(Vector3.Zero, Speed);
+			velocity = verticalVelocity + planarVelocity;
 		}
 
 		Velocity = velocity;

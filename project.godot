@@ -15,6 +15,17 @@ run/main_scene="res://scenes/Ship.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+window/size/resizable=false
+
 [dotnet]
 
 project/assembly_name="SpaceExploration"
